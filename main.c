@@ -393,8 +393,9 @@ void mode2_run(void)
         flag_keep_going = 1;
         IRCOM = 0;
         break;
-    case (6):
+    case 0x15:
         motor(0, 0, 16); //stop
+        flag_keep_going = 0;
         IRCOM = 0;
         break;
     default:
