@@ -1,7 +1,7 @@
 # 8051_intelligent_car
 Optimization of intelligent tracking and obstacle avoidance car based on 8051 micro controller
 ## About me
-A college student of HDU. 
+A college student from HDU. 
 ## features
 - track tracing
 - auto obstacle avoidance
