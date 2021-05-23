@@ -59,7 +59,6 @@ void tim0_isr() interrupt 1
 {
     TL0 = T1time;
     TH0 = T1time >> 8;
-    P20 = 1;
     tick++;
     if (tick == 16)
     {
@@ -81,8 +80,6 @@ void tim0_isr() interrupt 1
         left_motor_EN = 0;
         right_motor_EN = 0;
     }
-
-    P20 = 0;
 }
 
 /**
