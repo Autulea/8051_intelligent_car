@@ -9,8 +9,9 @@
 #include <intrins.h>
 #include <math.h>
 
-//#define test
-
+//#define IR_test
+//#define BCD_test
+#define realeased
 /**
  * @brief   define all used variables.
  */
@@ -25,14 +26,14 @@
 #define right_motor_IN2 P15
 #define left_motor_EN P16
 #define right_motor_EN P17
-#define motor_speed 14
 
 int motor_time = 0, runtime = 0;
-code unsigned char BCD[10] = {0x03, 0x9F, 0x25, 0x0D, 0x99, 0x49, 0x41, 0x1F, 0x01, 0x09};
+code unsigned char BCD[16] = {0x03, 0x9F, 0x25, 0x0D, 0x99, 0x49, 0x41, 0x1F, 0x01, 0x09, 0x11, 0xC1, 0x63, 0x85, 0x61, 0x71};
 char globle_left_speed = 0, globle_right_speed = 0, mode = 2, tick = 0, delay_tick = 0, flag_ir_handle = 0;
 char flag_sensor_scan = 0, flag_keep_going = 0;
 char mid_way = 0, left_way = 0, right_way = 0, left_object_sniffer = 0, right_object_sniffer = 0;
 unsigned char way_statu = 0, IRCOM = 0;
+char temp = 0;
 
 /**
  * @brief   timer0 init function. By this timer, system ticks every one milisecond.
@@ -336,26 +337,31 @@ void IR_decoder(void)
     if (flag_ir_handle)
     {
         IR_demod();
+#ifdef realeased
         switch (IRCOM)
         {
         case 0x45:
             mode = 0;
             P0 = BCD[mode];
+            flag_keep_going = 0;
             IRCOM = 0;
             break;
         case 0x46:
             mode = 1;
             P0 = BCD[mode];
+            flag_keep_going = 0;
             IRCOM = 0;
             break;
         case 0x47:
             mode = 2;
             P0 = BCD[mode];
+            flag_keep_going = 0;
             IRCOM = 0;
             break;
         default:
             break;
         }
+#endif
         flag_ir_handle = 0;
     }
 }
@@ -446,7 +452,7 @@ int main(void)
     exti0_init();
     IR_init();
     EA = 1; //enable global interrupt
-#ifdef test
+#ifdef IR_test
     while (1)
     {
         IR_decoder();
@@ -461,7 +467,19 @@ int main(void)
             IRCOM = 0;
         }
     }
-#else
+#endif
+
+#ifdef BCD_test
+    while (1)
+    {
+        temp = (temp + 1) % 16;
+        //P0 = ~(0x01 << temp);
+        P0 = BCD[temp];
+        delay_ticktime(500);
+    }
+#endif
+
+#ifdef realeased
     P0 = BCD[mode];
     while (1)
     {
