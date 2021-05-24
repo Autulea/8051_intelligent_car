@@ -213,7 +213,7 @@ void avoidence(void)
         motor(5, 5, 15); //forward
         break;
     case 1:
-        motor(-9, 9, 192); //turn left
+        motor(-9, 9, 192);//turn left
         delay_runtime();
         break;
     case 2:
@@ -387,11 +387,11 @@ void mode2_run(void)
         IRCOM = 0;
         break;
     case 0x07:
-        motor(-9, 9, 96); //left
+        flag_keep_going? motor(3, 12, 192): motor(-9, 9, 96); //left
         IRCOM = 0;
         break;
     case 0x09:
-        motor(9, -9, 96); //right
+        flag_keep_going? motor(12, 3, 192):motor(9, -9, 96); //right
         IRCOM = 0;
         break;
     case 0x40:
