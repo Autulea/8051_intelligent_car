@@ -11,7 +11,7 @@
 
 //#define IR_test
 //#define BCD_test
-#define realeased
+#define released
 /**
  * @brief   define all used variables.
  */
@@ -337,7 +337,7 @@ void IR_decoder(void)
     if (flag_ir_handle)
     {
         IR_demod();
-#ifdef realeased
+#ifdef released
         switch (IRCOM)
         {
         case 0x45:
@@ -479,7 +479,7 @@ int main(void)
     }
 #endif
 
-#ifdef realeased
+#ifdef released
     P0 = BCD[mode];
     while (1)
     {
