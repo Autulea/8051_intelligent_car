@@ -11,7 +11,7 @@
 
 //#define IR_test
 //#define BCD_test
-#define released
+#define realeased
 /**
  * @brief   define all used variables.
  */
@@ -175,23 +175,23 @@ void track_tracing(void)
     way_statu = (left_way << 2) + (mid_way << 1) + right_way;
     switch (way_statu)
     {
-    case (1):
+    case (1)://0b001
+        motor(9, 9, 15); //turn right
+        break;
+    case (2)://0b010
+        motor(0, 0, 15); //stop
+        break;
+    case (3)://0b011
         motor(9, -9, 15); //turn right
         break;
-    case (2):
-        motor(9, 9, 15); //forward
+    case (4)://0b100
+        motor(9, 9, 15); //turn left
         break;
-    case (3):
-        motor(9, -9, 15); //turn right
-        break;
-    case (4):
+    case (6)://0b110
         motor(-9, 9, 15); //turn left
         break;
-    case (6):
-        motor(-9, 9, 15); //turn left
-        break;
-    case (7):
-        motor(-9, -9, 15); //backword
+    case (7)://0b111
+        motor(9, 9, 15); //backword
         break;
     default:
         motor(0, 0, 15);
@@ -213,18 +213,28 @@ void avoidence(void)
         motor(5, 5, 15); //forward
         break;
     case 1:
-        motor(-9, 9, 192);//turn left
-        delay_runtime();
-        break;
-    case 2:
-        motor(9, -9, 192); //turn right
-        delay_runtime();
-        break;
-    case 3:
+        P23 = 0;
         motor(-9, -9, 192); //backword
         delay_runtime();
         motor(-9, 9, 192); //turn left
         delay_runtime();
+        P23 = 1;
+        break;
+    case 2:
+        P23 = 0;
+        motor(-9, -9, 192); //backword
+        delay_runtime();
+        motor(9, -9, 192); //turn right
+        delay_runtime();
+        P23 = 1;
+        break;
+    case 3:
+        P23 = 0;
+        motor(-9, -9, 192); //backword
+        delay_runtime();
+        motor(-9, 9, 192); //turn left
+        delay_runtime();
+        P23 = 1;
         break;
     default:
         break;
@@ -337,24 +347,24 @@ void IR_decoder(void)
     if (flag_ir_handle)
     {
         IR_demod();
-#ifdef released
+#ifdef realeased
         switch (IRCOM)
         {
         case 0x45:
             mode = 0;
-            P0 = BCD[mode];
+            P0 = BCD[mode + 10];
             flag_keep_going = 0;
             IRCOM = 0;
             break;
         case 0x46:
             mode = 1;
-            P0 = BCD[mode];
+            P0 = BCD[mode + 10];
             flag_keep_going = 0;
             IRCOM = 0;
             break;
         case 0x47:
             mode = 2;
-            P0 = BCD[mode];
+            P0 = BCD[mode + 10];
             flag_keep_going = 0;
             IRCOM = 0;
             break;
@@ -387,11 +397,11 @@ void mode2_run(void)
         IRCOM = 0;
         break;
     case 0x07:
-        flag_keep_going? motor(3, 12, 192): motor(-9, 9, 96); //left
+        flag_keep_going ? motor(3, 12, 384) : motor(-9, 9, 96); //left
         IRCOM = 0;
         break;
     case 0x09:
-        flag_keep_going? motor(12, 3, 192):motor(9, -9, 96); //right
+        flag_keep_going ? motor(12, 3, 384) : motor(9, -9, 96); //right
         IRCOM = 0;
         break;
     case 0x40:
@@ -436,7 +446,7 @@ void exti0_isr(void) interrupt 0
     if (P32 == 0)
     {
         mode = (mode + 1) % mode_amount;
-        P0 = BCD[mode];
+        P0 = BCD[mode + 10];
     }
 }
 /**
@@ -479,8 +489,8 @@ int main(void)
     }
 #endif
 
-#ifdef released
-    P0 = BCD[mode];
+#ifdef realeased
+    P0 = BCD[mode + 10];
     while (1)
     {
         IR_decoder();
