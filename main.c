@@ -10,8 +10,8 @@
 #include <math.h>
 
 //#define IR_test
-//#define BCD_test
-#define realeased
+#define BCD_test
+//#define released
 /**
  * @brief   define all used variables.
  */
@@ -175,26 +175,29 @@ void track_tracing(void)
     way_statu = (left_way << 2) + (mid_way << 1) + right_way;
     switch (way_statu)
     {
-    case (1)://0b001
-        motor(9, 9, 15); //turn right
+    case (0):            //0b000
+        motor(-9, -9, 15);//backward
         break;
-    case (2)://0b010
-        motor(0, 0, 15); //stop
-        break;
-    case (3)://0b011
+    case (1):            //0b001
         motor(9, -9, 15); //turn right
         break;
-    case (4)://0b100
-        motor(9, 9, 15); //turn left
+    case (2):            //0b010
+        motor(9, 9, 15); //forward
         break;
-    case (6)://0b110
+    case (3):             //0b011
+        motor(9, 9, 15); //forward
+        break;
+    case (4):            //0b100
         motor(-9, 9, 15); //turn left
         break;
-    case (7)://0b111
+    case (6):             //0b110
+        motor(9, 9, 15); //forward
+        break;
+    case (7):            //0b111
         motor(9, 9, 15); //backword
         break;
     default:
-        motor(0, 0, 15);
+        motor(0, 0, 15);//stop
         break;
     }
 }
@@ -489,7 +492,7 @@ int main(void)
     }
 #endif
 
-#ifdef realeased
+#ifdef released
     P0 = BCD[mode + 10];
     while (1)
     {
