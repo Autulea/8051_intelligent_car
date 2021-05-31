@@ -350,7 +350,7 @@ void IR_decoder(void)
     if (flag_ir_handle)
     {
         IR_demod();
-#ifdef realeased
+#ifdef released
         switch (IRCOM)
         {
         case 0x45:
